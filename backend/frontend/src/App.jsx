@@ -6,6 +6,9 @@ import Home from './pages/Home'
 import {Toaster} from "react-hot-toast";
 import {useAuthContext} from "./context/AuthContext.jsx";
 import AddService from './components/AddService.jsx'
+import EventDashboard from './pages/EventDashBoard.jsx'
+import AdminEventPage from './pages/AdminDashboard.jsx'
+import AddCategories from './components/AddCategory.jsx'
 
 function App() {
   const {authUser} = useAuthContext();
@@ -16,8 +19,12 @@ function App() {
         <Route path = "/login" element = {authUser?  <Navigate to= '/'/> : <Login /> }/>
         <Route path = "/signup" element = {authUser? <Navigate to= '/'/> : <Signup /> }/>
 
+{/* ======================================================================================================== */}
 
         <Route path = "/addservices" element = {authUser? <AddService /> : <Navigate to= '/'/> }/>
+        <Route path = "/addcategories" element = {authUser? <AddCategories /> : <Navigate to= '/'/> }/>
+        <Route path = "/events" element = {authUser? <EventDashboard /> : <Navigate to= '/'/> }/>
+        <Route path = "/admin" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
 
 
       </Routes>
