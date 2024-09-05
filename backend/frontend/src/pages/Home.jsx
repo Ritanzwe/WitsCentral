@@ -5,6 +5,10 @@ import { useLogout } from '../hooks/useLogout';
 import profileImage from '/dummy.jpg'
 import logo from '../assets/onepiece.jpg'
 import Search from '../components/Search';
+import AllServices from "../components/AllServices";
+import AllShops from '../components/AllShops';
+import AllTutors from '../components/AllTutors';
+import AllEvents from '../components/AllEvents';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -78,11 +82,18 @@ const Home = () => {
                 </Nav>
             </Navbar>
 
-            {/* Content */}
+            <div style={{paddingTop: '100px',paddingBottom: '100px'}} className="w-100 d-flex justify-content-center flex-column align-items-center bg-secondary">
+                <div className='w-75 px-1'>
+                    <Search onSearch={handleSearch} />
+                </div>
+                <AllServices/>
+            </div>
             <div className="container">
-                <Search onSearch={handleSearch} />
-                <h1>Welcome to Your Dashboard!</h1>
-                <p>This is your home page after successfully logging in. Feel free to explore the platform.</p>
+                <AllShops/>
+                <hr/>
+                <AllTutors/>
+                <hr/>
+                <AllEvents/>
             </div>
         </div>
     );
