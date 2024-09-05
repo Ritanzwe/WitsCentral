@@ -11,6 +11,8 @@ import AdminEventPage from './pages/AdminDashboard.jsx'
 import AddCategories from './components/AddCategory.jsx'
 import Books from './pages/Books.jsx'
 import EventDetails from './pages/EventsDetails.jsx'
+import StudentDashboard from './components/studentDashboard.jsx'
+import CreateTutorProfile from './components/TutorProfileCreation.jsx'
 
 function App() {
   const {authUser} = useAuthContext();
@@ -28,6 +30,11 @@ function App() {
         <Route path = "/events" element = {authUser? <EventDashboard /> : <Navigate to= '/'/> }/>
         <Route path = "/event/:id" element = {authUser? <EventDetails/> : <Navigate to= '/'/> }/>
         <Route path = "/admin" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/student" element = {authUser? <StudentDashboard/> : <Navigate to= '/'/> }/>
+        <Route path = "/tutorprofile" element = {authUser? <CreateTutorProfile/> : <Navigate to= '/'/> }/>
+
+
+        
 
         {/* ================================================================================== */}
         <Route path = "/service/tutoring" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
