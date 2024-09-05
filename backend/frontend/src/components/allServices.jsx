@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; // Ensure you have react-router-dom installed
 
 const AllServices = () => {
   const [services, setServices] = useState([]);
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     // Fetch data from API
@@ -30,22 +30,19 @@ const AllServices = () => {
   };
 
   return (
-    <div className='text-center mt-4'>
-      <h2>Services</h2>
-      <Container className="mt-4 d-flex justify-content-center align-items-center">
-        <div className="d-flex flex-wrap justify-content-center">
-          {services.map((service) => (
-            <Button
-              className='m-2 bg-white text-primary border-0 px-4'
-              key={service._id}
-              variant="primary"
-              onClick={() => handleButtonClick(service._id)}
-            >
-              {service.service}
-            </Button>
-          ))}
-        </div>
-      </Container>
+    <div className='text-center mt-1'>
+      <h2 className='pb-3'>Explore</h2>
+      <div className="d-flex justify-content-center mb-4 flex-wrap gap-3">
+        {services.map(service => (
+          <button
+            key={service._id}
+            onClick={() => handleButtonClick(service._id)}
+            className={`btn btn-lg ${selectedCategory === service.service ? 'btn-primary' : 'btn-outline-secondary'}`}
+          >
+            {service.service}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
