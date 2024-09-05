@@ -24,9 +24,14 @@ const AllServices = () => {
     fetchServices();
   }, []);
 
-  const handleButtonClick = (serviceId) => {
+  const handleButtonClick = (service) => {
     // Navigate to the page corresponding to the service
-    navigate(`/service/${serviceId}`);
+    if(service.includes("Student")){
+      navigate(`/service/student-market`);
+    }
+    else{
+      navigate(`/service/${service.toLowerCase()}`);
+    }
   };
 
   return (
@@ -36,7 +41,7 @@ const AllServices = () => {
         {services.map(service => (
           <button
             key={service._id}
-            onClick={() => handleButtonClick(service._id)}
+            onClick={() => handleButtonClick(service.service)}
             className={`btn btn-lg ${selectedCategory === service.service ? 'btn-primary' : 'btn-outline-secondary'}`}
           >
             {service.service}
