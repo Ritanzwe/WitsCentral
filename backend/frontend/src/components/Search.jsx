@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 
 const Search = ({ onSearch }) => {
@@ -13,21 +13,22 @@ const Search = ({ onSearch }) => {
     };
 
     return (
-        <div className="d-flex justify-content-center mt-5">
-            <Form onSubmit={handleSubmit} className="w-50">
+        // <div className="">
+            <Form onSubmit={handleSubmit} className="w-100">
                 <InputGroup>
                     <FormControl
+                        className='p-3'
                         type="text"
                         placeholder="Search..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" className='px-3'>
                         Search
                     </Button>
                 </InputGroup>
             </Form>
-        </div>
+        // </div>
     );
 };
 
