@@ -1,61 +1,59 @@
-import { Link } from "react-router-dom";
-
-const events = [
-  {
-    id: 1,
-    image: 'https://placehold.jp/150x150.png',
-    name: 'Community Workshop',
-    date: '2024-10-15',
-    location: 'Johannesburg Community Center',
-    description: 'Join us for an engaging workshop on community building and leadership. Various activities and discussions will be held throughout the day.',
-    availability: 'Free',
-  },
-  {
-    id: 2,
-    image: 'https://placehold.jp/150x150.png',
-    name: 'Tech Innovations Conference',
-    date: '2024-11-20',
-    location: 'Cape Town Convention Center',
-    description: 'A conference showcasing the latest in tech innovations. Hear from industry leaders and participate in tech demonstrations.',
-    availability: 'Paid',
-  },
-  {
-    id: 3,
-    image: 'https://placehold.jp/150x150.png',
-    name: 'Music Festival',
-    date: '2024-12-05',
-    location: 'Durban Sports Arena',
-    description: 'Enjoy a day of live music from various genres at the annual Music Festival. Featuring performances from popular bands and artists.',
-    availability: 'Both',
-  },
-  {
-    id: 4,
-    image: 'https://placehold.jp/150x150.png',
-    name: 'Art Exhibition',
-    date: '2024-09-10',
-    location: 'Pretoria Art Gallery',
-    description: 'Explore a curated collection of contemporary art from local artists. An evening of culture and creativity awaits.',
-    availability: 'Free',
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AllEvents = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events'); // Replace with your API endpoint
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setEvents(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  function cha(image){
+    const ll = `${image}`.split("/")[2];
+    return ll;
+  }
+
   return (
     <div className="container mt-3">
       <h2 className="mb-4">Upcoming Events</h2>
       <div className="row">
         {events.map((event) => (
-          <Link to={`/event/${event.id}`} style={{ cursor: "pointer", textDecoration: "none" }} key={event.id} className="col-md-6 col-lg-4 col-xl-3 mb-4">
+          <Link
+            to={`/event/${event._id}`}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
+            key={event._id}
+            className="col-md-6 col-lg-4 col-xl-3 mb-4"
+          >
             <div className="card shadow-sm">
               <img
-                src={event.image}
+                src={event.image ? `http://localhost:5000/uploads/${cha(event.image)}` : 'https://placehold.jp/150x150.png'}
                 className="card-img-top"
-                alt={event.name}
+                alt={event.title}
                 style={{ height: '250px', objectFit: 'cover' }}
               />
               <div className="card-body" style={{ backgroundColor: '#f8f9fa' }}>
                 <h5 className="card-title text-primary">
-                  {event.name}
+                  {event.title}
                 </h5>
                 <p className="card-text text-muted">
                   {event.date} | {event.location}
@@ -66,7 +64,7 @@ const AllEvents = () => {
                     : event.description}
                 </p>
                 <p className="card-text">
-                  <strong>Availability:</strong> {event.availability}
+                  <strong>Availability:</strong> {event.price}
                 </p>
               </div>
             </div>

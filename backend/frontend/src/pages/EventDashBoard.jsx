@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Search from '../components/Search';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const EventDashboard = () => {
   const [events, setEvents] = useState([]);
@@ -43,7 +43,6 @@ const EventDashboard = () => {
 
   const handleCategoryChange = (category) => {
     if (selectedCategory === category) {
-      // If the selected category is clicked again, reset to 'All'
       setSelectedCategory('All');
     } else {
       setSelectedCategory(category);
@@ -53,8 +52,7 @@ const EventDashboard = () => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-  
-  // Truncate description helper function
+
   const truncateDescription = (description, length = 100) => {
     return description.length > length ? description.substring(0, length) + '...' : description;
   };
@@ -66,10 +64,8 @@ const EventDashboard = () => {
     .filter(event => selectedCategory === 'All' || event.category === selectedCategory)
     .filter(event => event.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
-
-  function cha(image){
+  function cha(image) {
     const ll = `${image}`.split("/")[2];
-    console.log(ll);
     return ll;
   }
 
@@ -102,30 +98,31 @@ const EventDashboard = () => {
           {filteredEvents.length > 0 ? (
             filteredEvents.map(event => (
               <div key={event._id} className="col-md-6 col-lg-4 mb-4">
-                <div className="card h-100 shadow-sm">
-                  <img
-                    src={event.image ? `http://localhost:5000/uploads/${cha(event.image)}` : ''}
-                    alt={event.image}
-                    className="card-img-top"
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title text-center">{event.title}</h5>
-                    <p className="card-text text-muted text-center mb-2">
-                      {truncateDescription(event.description)}
-                    </p>
-                    <p className="card-text text-muted text-center">
-                      {event.date} | {event.time}
-                    </p>
+                <Link to={`/event/${event._id}`} style={{ textDecoration: 'none' }}>
+                  <div className="card h-100 shadow-sm">
+                    <img
+                      src={event.image ? `http://localhost:5000/uploads/${cha(event.image)}` : ''}
+                      alt={event.title}
+                      className="card-img-top"
+                      style={{ height: '200px', objectFit: 'cover' }}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title text-center">{event.title}</h5>
+                      <p className="card-text text-muted text-center mb-2">
+                        {truncateDescription(event.description)}
+                      </p>
+                      <p className="card-text text-muted text-center">
+                        {event.date} | {event.time}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             ))
           ) : (
             <p className="text-center text-muted">No events found for the selected category and search term.</p>
           )}
         </div>
-        
       </div>
     </>
   );

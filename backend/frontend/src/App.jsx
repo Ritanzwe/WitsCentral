@@ -9,6 +9,8 @@ import AddService from './components/AddService.jsx'
 import EventDashboard from './pages/EventDashBoard.jsx'
 import AdminEventPage from './pages/AdminDashboard.jsx'
 import AddCategories from './components/AddCategory.jsx'
+import Books from './pages/Books.jsx'
+import EventDetails from './pages/EventsDetails.jsx'
 
 function App() {
   const {authUser} = useAuthContext();
@@ -19,12 +21,22 @@ function App() {
         <Route path = "/login" element = {authUser?  <Navigate to= '/'/> : <Login /> }/>
         <Route path = "/signup" element = {authUser? <Navigate to= '/'/> : <Signup /> }/>
 
-{/* ======================================================================================================== */}
+        {/* ======================================================================================================== */}
 
         <Route path = "/addservices" element = {authUser? <AddService /> : <Navigate to= '/'/> }/>
         <Route path = "/addcategories" element = {authUser? <AddCategories /> : <Navigate to= '/'/> }/>
         <Route path = "/events" element = {authUser? <EventDashboard /> : <Navigate to= '/'/> }/>
+        <Route path = "/event/:id" element = {authUser? <EventDetails/> : <Navigate to= '/'/> }/>
         <Route path = "/admin" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+
+        {/* ================================================================================== */}
+        <Route path = "/service/tutoring" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/student-market" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/books" element = {authUser? <Books/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/elctronics" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/events" element = {authUser? <Navigate to= '/events'/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/forum" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/CCDU" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
 
 
       </Routes>
