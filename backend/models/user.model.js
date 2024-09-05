@@ -17,16 +17,20 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    default:"public/images/dummy.jpg"
+    default: "public/images/dummy.jpg",
   },
   role: {
     type: String,
-    enum: ['student', 'admin', 'serviceProvider'],
+    enum: ['student', 'admin', 'tutor'],
     default: 'student',
   },
   contactInfo: {
     phone: String,
     address: String,
+  },
+  tutor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tutor',
   },
   createdAt: {
     type: Date,

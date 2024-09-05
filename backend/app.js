@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var eventsRouter = require('./routes/events');
+var tutorsRouter = require('./routes/tutor');
 
 var app = express();
 
@@ -22,5 +23,6 @@ app.use('/api/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/events', eventsRouter);
+app.use('/api/tutors', tutorsRouter);
 
 module.exports = app;

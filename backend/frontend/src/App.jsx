@@ -9,6 +9,8 @@ import AddService from './components/AddService.jsx'
 import EventDashboard from './pages/EventDashBoard.jsx'
 import AdminEventPage from './pages/AdminDashboard.jsx'
 import AddCategories from './components/AddCategory.jsx'
+import StudentDashboard from './components/studentDashboard.jsx'
+import CreateTutorProfile from './components/TutorProfileCreation.jsx'
 
 function App() {
   const {authUser} = useAuthContext();
@@ -25,6 +27,11 @@ function App() {
         <Route path = "/addcategories" element = {authUser? <AddCategories /> : <Navigate to= '/'/> }/>
         <Route path = "/events" element = {authUser? <EventDashboard /> : <Navigate to= '/'/> }/>
         <Route path = "/admin" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/student" element = {authUser? <StudentDashboard/> : <Navigate to= '/'/> }/>
+        <Route path = "/tutorprofile" element = {authUser? <CreateTutorProfile/> : <Navigate to= '/'/> }/>
+
+
+        
 
 
       </Routes>
