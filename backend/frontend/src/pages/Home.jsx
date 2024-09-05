@@ -2,19 +2,26 @@ import { useState, useEffect } from 'react';
 import { Navbar, Nav, Dropdown, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
+import profileImage from '../../public/dummy.jpg'
+import logo from '../assets/onepiece.jpg'
 
 const Home = () => {
     const navigate = useNavigate();
     const [profilePic, setProfilePic] = useState('');
     const {logout} = useLogout();
 
-    // Fetch the profile pic from localStorage
     useEffect(() => {
-        const storedProfilePic = localStorage.getItem('profilePic');
-        if (storedProfilePic) {
-            setProfilePic(storedProfilePic);
+        const all = JSON.parse(localStorage.getItem('wits'));
+        if (all) {
+            const {profilePicture} = all;
+            if(profilePic.includes("dummy")){
+              setProfilePic(profileImage);
+            }
+            else{
+              setProfilePic(profilePicture);
+            }
         }
-    }, []);
+    }, [profilePic]);
 
     // Handle logout logic
     const handleLogout = async() => {
@@ -31,16 +38,15 @@ const Home = () => {
     return (
         <div>
             {/* Navbar */}
-            <Navbar bg="light" expand="lg" className="px-4">
+            <Navbar bg="light" expand="lg" className="px-4 flex justify-content-between">
                 <Navbar.Brand href="/" className="mr-auto">
                     <img
-                        src="https://example.com/logo.png" // Replace with your logo URL
+                        src={logo} // Replace with your logo URL
                         alt="Logo"
                         style={{ height: '40px' }}
                     />
                 </Navbar.Brand>
                 <Nav>
-                    {/* Profile Icon with Dropdown */}
                     <Dropdown align="end">
                         <Dropdown.Toggle
                             variant="light"
