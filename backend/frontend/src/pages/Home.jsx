@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Navbar, Nav, Dropdown, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
-import profileImage from '../../public/dummy.jpg'
+import profileImage from '/dummy.jpg'
 import logo from '../assets/onepiece.jpg'
+import Search from '../components/Search';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -13,13 +14,13 @@ const Home = () => {
     useEffect(() => {
         const all = JSON.parse(localStorage.getItem('wits'));
         if (all) {
-            const {profilePicture} = all;
-            if(profilePic.includes("dummy")){
+            // const {profilePicture} = all;
+            // if(profilePic.includes("dummy")){
               setProfilePic(profileImage);
-            }
-            else{
-              setProfilePic(profilePicture);
-            }
+            // }
+            // else{
+            //   setProfilePic(profilePicture);
+            // }
         }
     }, [profilePic]);
 
@@ -34,6 +35,11 @@ const Home = () => {
     const handleEditProfile = () => {
         navigate('/edit-profile');  // Redirect to edit profile page
     };
+
+    const handleSearch = (query) => {
+        console.log('Search query:', query);
+        // Implement your search logic here
+      };
 
     return (
         <div>
@@ -73,7 +79,8 @@ const Home = () => {
             </Navbar>
 
             {/* Content */}
-            <div className="container mt-5">
+            <div className="container">
+                <Search onSearch={handleSearch} />
                 <h1>Welcome to Your Dashboard!</h1>
                 <p>This is your home page after successfully logging in. Feel free to explore the platform.</p>
             </div>
