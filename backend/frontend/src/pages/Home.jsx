@@ -9,23 +9,49 @@ const Home = () => {
     const handleSearch = (query) => {
         console.log('Search query:', query);
         // Implement your search logic here
-      };
+    };
 
     return (
         <div>
-            <NavBar/>
-            <div style={{paddingTop: '25px',paddingBottom: '25px'}} className="w-100 d-flex justify-content-center flex-column align-items-center">
-                <AllServices/>
-                <div className='w-75 px-1'>
+            <NavBar />
+            
+            {/* Hero Section */}
+            <div className="hero-section text-center py-5 bg-light">
+                <h1>Welcome to WitsCentral</h1>
+                <p className="lead">Your one-stop platform for shops, tutors, events, and more!</p>
+            </div>
+
+            {/* Services & Search Section */}
+            <div className="w-100 d-flex justify-content-center flex-column align-items-center py-5 bg-white">
+                <AllServices />
+                <div className="w-75 px-3 mt-4">
                     <Search onSearch={handleSearch} />
                 </div>
             </div>
+
+            {/* Main Content */}
             <div className="container">
-                <AllShops/>
-                <hr/>
-                <AllTutors/>
-                <hr/>
-                <AllEvents/>
+                {/* Shops Section */}
+                <section className="my-5">
+                    <h2 className="text-center mb-4">Shops</h2>
+                    <AllShops />
+                </section>
+
+                <hr />
+
+                {/* Tutors Section */}
+                <section className="my-5">
+                    <h2 className="text-center mb-4">Tutors</h2>
+                    <AllTutors />
+                </section>
+
+                <hr />
+
+                {/* Events Section */}
+                <section className="my-5">
+                    <h2 className="text-center mb-4">Events</h2>
+                    <AllEvents />
+                </section>
             </div>
         </div>
     );

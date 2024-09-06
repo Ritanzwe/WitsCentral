@@ -22,6 +22,7 @@ const StudentDashboard = () => {
     { title: 'Python', backgroundImage: python },
   ]);
 
+  // Fetch tutors on component mount
   useEffect(() => {
     fetch('/api/tutors')
       .then(response => response.json())
@@ -29,28 +30,28 @@ const StudentDashboard = () => {
       .catch(error => console.error('Error fetching tutors:', error));
   }, []);
 
+  // Handle input search changes
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Filter tutors based on their description (bio) or name
+  // Filter tutors by their subject matching the search term
   const filteredTutors = tutors.filter(tutor => 
     tutor.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Navigate to the "Become a Tutor" profile page
   const handleBecomeTutor = () => {
     navigate('/tutorprofile');
   };
 
-  // Handle module click to set the search term to the module title
+  // Set the search term to the clicked module title
   const handleModuleClick = (moduleTitle) => {
     setSearchTerm(moduleTitle);
   };
 
-  // const greeting = 'Welcome'; // Replace with dynamic data
-  // const studentName = 'Student'; // Replace with dynamic data
-
-  function cha(image){
+  // Extract the filename from image URL
+  function cha(image) {
     const ll = `${image}`.split("/")[2];
     return ll;
   }
@@ -60,61 +61,58 @@ const StudentDashboard = () => {
       <NavBar />
 
       {/* Become a Tutor Section */}
-      <div style={styles.becomeTutorSection}>
-        <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
-        <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+      <div className="text-center my-5">
+        <h2>Interested in Becoming a Tutor?</h2>
+        <button 
+          onClick={handleBecomeTutor} 
+          className="btn btn-primary btn-lg mt-3"
+        >
           Become a Tutor
         </button>
       </div>
 
-      <div style={styles.dashboard}>
+      <div className="container">
         {/* Find a Perfect Tutor Box */}
-        <div style={styles.tutorBox}>
-          <h2 style={styles.tutorText}>Find a perfect tutor online</h2>
+        <div className="p-4 mb-5 bg-light rounded text-center">
+          <h2 className="mb-4">Find a perfect tutor online</h2>
           <input
             type="text"
             placeholder="Search for tutors..."
             value={searchTerm}
             onChange={handleSearchChange}
-            style={styles.searchInput}
+            className="form-control form-control-lg"
           />
         </div>
 
+        {/* Display modules if no search term is entered */}
         {searchTerm === '' && (
-          <>
-            {/* User Profile and Greeting */}
-            {/* <div style={styles.header}>
-              <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-            </div> */}
-
-            {/* Browse Modules Section */}
-            <div style={styles.modulesSection}>
-              <h2 style={styles.sectionTitle}>Browse Modules</h2>
-              <div style={styles.modulesContainer}>
-                {modules.map((module, index) => (
-                  <div 
-                    key={index} 
-                    style={styles.module} 
-                    onClick={() => handleModuleClick(module.title)} // Click handler
-                  >
-                    <img
-                      width="200"
-                      height="250"
-                      src={module.backgroundImage}
-                      alt={module.title}
-                      style={styles.moduleImage}
-                    />
-                    <p style={styles.moduleTitle}>{module.title}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="my-5">
+            <h2 className="text-center mb-4">Browse Modules</h2>
+            <div className="d-flex justify-content-center flex-wrap gap-4">
+              {modules.map((module, index) => (
+                <div 
+                  key={index} 
+                  className="text-center"
+                  onClick={() => handleModuleClick(module.title)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <img
+                    width="200"
+                    height="250"
+                    src={module.backgroundImage}
+                    alt={module.title}
+                    className="img-fluid rounded"
+                  />
+                  <p className="mt-2">{module.title}</p>
+                </div>
+              ))}
             </div>
-          </>
+          </div>
         )}
 
-        {/* All Tutors Section */}
-        <div style={styles.tutorsSection}>
-          <h2 style={styles.sectionTitle}>All Tutors</h2>
+        {/* Display tutors */}
+        <div className="mt-5">
+          <h2 className="text-center mb-4">All Tutors</h2>
           <div className="row">
             {filteredTutors.length > 0 ? (
               filteredTutors.map(tutor => (
@@ -131,7 +129,7 @@ const StudentDashboard = () => {
                       alt={tutor.userId.fullname}
                       style={{ height: '200px', objectFit: 'cover' }}
                     />
-                    <div className="card-body" style={{ backgroundColor: '#f8f9fa' }}>
+                    <div className="card-body bg-light">
                       <h5 className="card-title text-primary">
                         {tutor.userId.fullname}
                       </h5>
@@ -151,102 +149,15 @@ const StudentDashboard = () => {
                 </Link>
               ))
             ) : (
-              <p style={styles.noTutorsMessage}>No tutors found for {`${searchTerm}`}.</p>
+              <p className="text-center text-muted">
+                No tutors found for {`${searchTerm}`}.
+              </p>
             )}
           </div>
         </div>
       </div>
     </>
   );
-};
-
-// Styles
-const styles = {
-  dashboard: {
-    padding: '50px',
-    fontFamily: `'Poppins', sans-serif`,
-    maxWidth: '1200px',
-    margin: '0 auto',
-    backgroundColor: '#f7f9fc',
-  },
-  tutorBox: {
-    backgroundColor: '#f1f1f1',
-    padding: '20px',
-    borderRadius: '10px',
-    marginBottom: '30px',
-    textAlign: 'center',
-  },
-  tutorText: {
-    fontSize: '2em',
-    marginBottom: '15px',
-  },
-  searchInput: {
-    width: '100%',
-    padding: '15px',
-    borderRadius: '10px',
-    border: '1px solid #ddd',
-    fontSize: '1.2em',
-    outline: 'none',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '30px',
-  },
-  greeting: {
-    fontSize: '2.8em',
-    color: '#333',
-  },
-  modulesSection: {
-    marginBottom: '40px',
-  },
-  sectionTitle: {
-    fontSize: '2.2em',
-    marginBottom: '20px',
-  },
-  modulesContainer: {
-    display: 'flex',
-    overflowX: 'scroll',
-    gap: '20px',
-    cursor: 'pointer', // Make it clear the modules are clickable
-  },
-  module: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  moduleImage: {
-    borderRadius: '10px',
-  },
-  moduleTitle: {
-    fontSize: '1.2em',
-    marginTop: '10px',
-  },
-  tutorsSection: {
-    marginTop: '40px',
-  },
-  noTutorsMessage: {
-    fontSize: '1.4em',
-    color: '#999',
-    textAlign: 'center',
-    marginTop: '20px',
-  },
-  becomeTutorSection: {
-    marginBottom: '25px',
-    marginTop: '25px',
-    textAlign: 'center',
-  },
-  becomeTutorButton: {
-    padding: '15px 30px',
-    fontSize: '1.2em',
-    color: '#fff',
-    backgroundColor: '#007bff',
-    border: 'none',
-    borderRadius: '10px',
-    cursor: 'pointer',
-  },
 };
 
 export default StudentDashboard;
