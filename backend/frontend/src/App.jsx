@@ -13,6 +13,7 @@ import Books from './pages/Books.jsx'
 import EventDetails from './pages/EventsDetails.jsx'
 import StudentDashboard from './components/studentDashboard.jsx'
 import CreateTutorProfile from './components/TutorProfileCreation.jsx'
+import TutorProfile from './components/TutorProfile.jsx'
 
 function App() {
   const {authUser} = useAuthContext();
@@ -32,6 +33,7 @@ function App() {
         <Route path = "/admin" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
         <Route path = "/student" element = {authUser? <StudentDashboard/> : <Navigate to= '/'/> }/>
         <Route path = "/tutorprofile" element = {authUser? <CreateTutorProfile/> : <Navigate to= '/'/> }/>
+        <Route path = "/tutor/:id" element = {authUser? <TutorProfile/> : <Navigate to= '/'/> }/>
 
 
         
