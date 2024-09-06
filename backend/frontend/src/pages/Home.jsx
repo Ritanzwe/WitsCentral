@@ -17,14 +17,14 @@ const Home = () => {
             <NavBar />
             
             {/* Hero Section */}
-            <div className="hero-section py- bg-light">
+            <div className="hero-section py-5 bg-light">
                 <div className="container">
                     <div className="row align-items-center">
                         {/* Text Section */}
                         <div className="col-md-6 text-center text-md-start">
                             <h1 className="display-5 fw-bold mb-4">Welcome to WitsCentral</h1>
                             <p className="lead mb-4">
-                                Discover a world of opportunities right at your fingertips. Whether you're looking for the best shops, expert tutors, exciting events, or services to make your life easier, we have it all. 
+                                Discover a world of opportunities right at your fingertips. Whether {"you're"} looking for the best shops, expert tutors, exciting events, or services to make your life easier, we have it all. 
                             </p>
                             <p className="mb-4">
                                 Join our community and start exploring today! Your next great experience is just a click away.
@@ -40,7 +40,7 @@ const Home = () => {
             </div>
 
             {/* Services & Search Section */}
-            <div className="w-100 d-flex justify-content-center flex-column align-items-center py-5 bg-white">
+            <div id='services' className="w-100 d-flex justify-content-center flex-column align-items-center py-5 bg-white">
                 <AllServices />
                 <div className="w-75 px-3 mt-4">
                     <Search onSearch={handleSearch} />

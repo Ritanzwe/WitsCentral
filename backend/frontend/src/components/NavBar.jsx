@@ -30,7 +30,7 @@ function NavBar() {
   };
 
   return (
-    <Navbar expand="lg" style={styles.navbar}>
+    <Navbar className=' py-4' expand="lg" style={styles.navbar}>
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center">
           <img
