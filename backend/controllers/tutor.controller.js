@@ -5,10 +5,10 @@ const Tutor = require('../models/tutor.model');
 
 const register =  async (req, res) => {
     try {
-      const { subject, description, isPaid } = req.body;
+      const { subject, description, isPaid, contact } = req.body;
       const profileImage =  req.file ? `/uploads/${req.file.filename}` : '';
   
-      if (!subject || !description) {
+      if (!subject || !description || !contact) {
         return res.status(400).json({ error: "Subject and description are required" });
       }
   
@@ -17,6 +17,7 @@ const register =  async (req, res) => {
         subject,
         description,
         isPaid,
+        contactInfo:contact,
         profileImage,
       });
   
