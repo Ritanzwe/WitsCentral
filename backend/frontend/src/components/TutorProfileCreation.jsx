@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
-import NavBar from './NavBar';
+import { useState } from 'react';
+import NavBar from '../components/NavBar';
 import toast from 'react-hot-toast';
 
 const CreateTutorProfile = () => {
-  const [subject, setSubject] = useState('');
-  const [description, setDescription] = useState('');
-  const [isPaid, setIsPaid] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileData, setProfileData] = useState({
+    subject: '',
+    description: '',
+    isPaid: false,
+    profileImage: null,
+  });
 
-  const handleFormSubmit = async (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({ ...profileData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    setProfileData({ ...profileData, profileImage: e.target.files[0] });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('subject', subject);
-    formData.append('description', description);
-    formData.append('isPaid', isPaid);
-    if(!profileImage){
-        toast.error("Image is required");
-        return;
+    Object.keys(profileData).forEach(key => {
+      formData.append(key, profileData[key]);
+    });
+
+    if (!profileData.profileImage) {
+      toast.error("Image is required");
+      return;
     }
-    formData.append('image', profileImage); // Ensure this is handled correctly for file uploads
 
     try {
       const response = await fetch('/api/tutors', {
         method: 'POST',
-        body: formData, 
+        body: formData,
       });
 
       if (!response.ok) {
@@ -36,151 +47,121 @@ const CreateTutorProfile = () => {
       toast.success('Tutor profile created successfully!');
 
       // Clear form fields
-      setSubject('');
-      setDescription('');
-      setIsPaid(false);
-      setProfileImage(null);
-
+      setProfileData({
+        subject: '',
+        description: '',
+        isPaid: false,
+        profileImage: null,
+      });
     } catch (error) {
       console.error('Error during form submission:', error);
     }
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfileImage(URL.createObjectURL(file));
-    }
-  };
-
   return (
-    <>
+    <div>
       <NavBar />
       <div style={styles.container}>
         <h2 style={styles.title}>Create Tutor Profile</h2>
-        <form onSubmit={handleFormSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            name="subject"
+            placeholder="Subject"
+            value={profileData.subject}
+            onChange={handleChange}
+            style={styles.input}
+          />
 
-          {/* Subject */}
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Subject</label>
-            <input
-              type="text"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              style={styles.input}
-              required
-            />
-          </div>
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={profileData.description}
+            onChange={handleChange}
+            style={styles.textarea}
+          />
 
-          {/* Description */}
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={styles.textarea}
-              required
-            />
-          </div>
-
-          {/* Paid or Free */}
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Paid</label>
-            <div style={styles.radioGroup}>
-              <label style={styles.radioLabel}>
-                <input
-                  type="radio"
-                  value="paid"
-                  checked={isPaid}
-                  onChange={() => setIsPaid(true)}
-                  style={styles.radioInput}
-                />{' '}
-                Paid
-              </label>
-              <label style={styles.radioLabel}>
-                <input
-                  type="radio"
-                  value="free"
-                  checked={!isPaid}
-                  onChange={() => setIsPaid(false)}
-                  style={styles.radioInput}
-                />{' '}
-                Free
-              </label>
-            </div>
-          </div>
-
-          {/* Image Upload */}
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Profile Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              style={styles.fileInput}
-            />
-            {profileImage && (
-              <img
-                src={profileImage}
-                alt="Profile Preview"
-                style={styles.profilePreview}
+          <div style={styles.radioGroup}>
+            <label style={styles.radioLabel}>
+              <input
+                type="radio"
+                name="isPaid"
+                value="true"
+                checked={profileData.isPaid}
+                onChange={() => setProfileData({ ...profileData, isPaid: true })}
+                style={styles.radioInput}
               />
-            )}
+              Paid
+            </label>
+            <label style={styles.radioLabel}>
+              <input
+                type="radio"
+                name="isPaid"
+                value="false"
+                checked={!profileData.isPaid}
+                onChange={() => setProfileData({ ...profileData, isPaid: false })}
+                style={styles.radioInput}
+              />
+              Free
+            </label>
           </div>
+
+          <input
+            type="file"
+            name="profileImage"
+            onChange={handleImageChange}
+            style={styles.fileInput}
+          />
+          {profileData.profileImage && (
+            <img
+              src={URL.createObjectURL(profileData.profileImage)}
+              alt="Profile Preview"
+              style={styles.profilePreview}
+            />
+          )}
 
           <button type="submit" style={styles.submitButton}>
             Submit
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
-// Styles
+// Styles for Create Tutor Profile Page
 const styles = {
   container: {
+    padding: '40px',
     maxWidth: '600px',
     margin: '0 auto',
-    padding: '40px',
     backgroundColor: '#ffffff',
     borderRadius: '8px',
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   title: {
     textAlign: 'center',
-    marginBottom: '30px',
     fontSize: '2em',
+    marginBottom: '30px',
     color: '#333',
-    fontWeight: 'bold',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-  },
-  formGroup: {
-    marginBottom: '20px',
-  },
-  label: {
-    marginBottom: '10px',
-    fontSize: '1.2em',
-    color: '#555',
-    fontWeight: 'bold',
+    gap: '20px',
   },
   input: {
-    width: '100%',
     padding: '12px',
     borderRadius: '5px',
     border: '1px solid #ddd',
-    fontSize: '1.1em',
+    fontSize: '1em',
     outline: 'none',
   },
   textarea: {
-    width: '100%',
     padding: '12px',
     borderRadius: '5px',
     border: '1px solid #ddd',
-    fontSize: '1.1em',
+    fontSize: '1em',
     outline: 'none',
     height: '120px',
     resize: 'vertical',
@@ -190,14 +171,13 @@ const styles = {
     gap: '15px',
   },
   radioLabel: {
-    fontSize: '1.1em',
+    fontSize: '1em',
     color: '#555',
   },
   radioInput: {
     marginRight: '8px',
   },
   fileInput: {
-    width: '100%',
     padding: '8px',
     fontSize: '1em',
   },
@@ -209,18 +189,14 @@ const styles = {
     objectFit: 'cover',
   },
   submitButton: {
-    padding: '15px',
+    padding: '12px',
     backgroundColor: '#007bff',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
     cursor: 'pointer',
-    textAlign: 'center',
     transition: 'background-color 0.3s',
-  },
-  submitButtonHover: {
-    backgroundColor: '#0056b3',
   },
 };
 

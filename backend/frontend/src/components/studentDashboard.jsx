@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSpring, useTrail, animated } from '@react-spring/web';
 import NavBar from './NavBar';
 import Maths from "../assets/maths.png";
 import dsa from "../assets/dsa.png";
@@ -7,9 +8,9 @@ import Econ from "../assets/Econ.png";
 import stats from "../assets/stats.png";
 import python from "../assets/python.png";
 import { useNavigate } from 'react-router-dom';
+import AllTutors from './AllTutors';
 
-const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
-  const [greeting, setGreeting] = useState('');
+const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [modules] = useState([
@@ -25,6 +26,30 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
     { name: 'Tutor B', bio: 'Specializes in Chemistry.', image: '/path/to/tutorB.jpg' },
     { name: 'Tutor C', bio: 'Computer Science tutor.', image: '/path/to/tutorC.jpg' },
   ]);
+
+  // Animation hooks
+  const greetingAnimation = useSpring({
+    opacity: 1,
+    transform: 'translateY(0px)',
+    from: { opacity: 0, transform: 'translateY(-20px)' },
+    config: { tension: 200, friction: 15 },
+  });
+
+  const modulesTrail = useTrail(modules.length, {
+    opacity: 1,
+    transform: 'scale(1)',
+    from: { opacity: 0, transform: 'scale(0.9)' },
+    delay: 300,
+    config: { tension: 200, friction: 15 },
+  });
+
+  const tutorsTrail = useTrail(tutors.length, {
+    opacity: 1,
+    transform: 'translateY(0px)',
+    from: { opacity: 0, transform: 'translateY(20px)' },
+    delay: 500,
+    config: { tension: 200, friction: 20 },
+  });
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -53,6 +78,14 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
   return (
     <>
       <NavBar />
+
+      {/* Become a Tutor Section */}
+      <div className='mb-2' style={styles.becomeTutorSection}>
+        <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
+        <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+          Become a Tutor
+        </button>
+      </div>
 
       <div style={styles.dashboard}>
         {/* Find a Perfect Tutor Box */}
