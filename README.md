@@ -65,14 +65,6 @@ WitsCentral is an online platform designed exclusively for Wits University stude
   - Authentication and authorization (using JWT or OAuth).
   - Error handling and logging.
 
-### Database - MongoDB (via Azure Cosmos DB)
-- **Schemas:**
-  - User Schema: Stores user data, including personal details, profile info, and authentication credentials.
-  - Item Schema: Stores details of items listed for sale.
-  - Forum Schema: Manages forum posts, comments, and interactions.
-  - Service Schema: Details of services offered or needed by students.
-  - Event Schema: Manages event information, tickets, RSVPs, and reminders.
-  - Counseling Schema: Appointment details, student history, and resource management.
 
 ### Azure Cloud Services
 - **Azure App Service:** Hosts the Node.js backend API.
