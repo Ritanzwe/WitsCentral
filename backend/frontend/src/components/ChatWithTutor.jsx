@@ -1,4 +1,3 @@
-// src/ChatWithTutor.jsx
 import React, { useState } from 'react';
 
 const ChatWithTutor = ({ selectedTutor }) => {

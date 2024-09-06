@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSpring, useTrail, animated } from '@react-spring/web';
 import NavBar from './NavBar';
 import Maths from "../assets/maths.png";
 import dsa from "../assets/dsa.png";
@@ -26,30 +25,6 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
     { name: 'Tutor B', bio: 'Specializes in Chemistry.', image: '/path/to/tutorB.jpg' },
     { name: 'Tutor C', bio: 'Computer Science tutor.', image: '/path/to/tutorC.jpg' },
   ]);
-
-  // Animation hooks
-  const greetingAnimation = useSpring({
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(-20px)' },
-    config: { tension: 200, friction: 15 },
-  });
-
-  const modulesTrail = useTrail(modules.length, {
-    opacity: 1,
-    transform: 'scale(1)',
-    from: { opacity: 0, transform: 'scale(0.9)' },
-    delay: 300,
-    config: { tension: 200, friction: 15 },
-  });
-
-  const tutorsTrail = useTrail(tutors.length, {
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(20px)' },
-    delay: 500,
-    config: { tension: 200, friction: 20 },
-  });
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -97,23 +72,22 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
           <>
             {/* User Profile and Greeting */}
             <div style={styles.header}>
-              <animated.div style={{ ...styles.greetingContainer, ...greetingAnimation }}>
+              <div style={styles.greetingContainer}>
                 <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-              </animated.div>
+              </div>
             </div>
 
             {/* Browse Modules Section */}
             <div style={styles.modulesSection}>
               <h2 style={styles.sectionTitle}>Browse Modules</h2>
               <div style={styles.modulesContainer}>
-                {modulesTrail.map((props, index) => (
-                  <animated.img
-                    style={props}
+                {modules.map((module, index) => (
+                  <img
                     width={"200"}
                     height={"250"}
                     key={index}
-                    src={modules[index].backgroundImage}
-                    alt={modules[index].title}
+                    src={module.backgroundImage}
+                    alt={module.title}
                   />
                 ))}
               </div>
@@ -134,12 +108,12 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
           <h2 style={styles.sectionTitle}>All Tutors</h2>
           <div style={styles.tutorContainer}>
             {filteredTutors.length > 0 ? (
-              tutorsTrail.map((props, index) => (
-                <animated.div key={index} style={{ ...styles.tutorCard, ...props }}>
-                  <img src={filteredTutors[index].image} alt={filteredTutors[index].name} style={styles.tutorImage} />
-                  <h3 style={styles.tutorName}>{filteredTutors[index].name}</h3>
-                  <p style={styles.tutorBio}>{filteredTutors[index].bio}</p>
-                </animated.div>
+              filteredTutors.map((tutor, index) => (
+                <div key={index} style={styles.tutorCard}>
+                  <img src={tutor.image} alt={tutor.name} style={styles.tutorImage} />
+                  <h3 style={styles.tutorName}>{tutor.name}</h3>
+                  <p style={styles.tutorBio}>{tutor.bio}</p>
+                </div>
               ))
             ) : (
               <p style={styles.noTutorsMessage}>No tutors found for "{searchTerm}".</p>
@@ -258,7 +232,7 @@ const styles = {
     color: '#fff',
     backgroundColor: '#007bff',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '5px',
     cursor: 'pointer',
   },
 };
