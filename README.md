@@ -69,7 +69,7 @@ WitsCentral is an online platform designed exclusively for Wits University stude
 ### Azure Cloud Services
 - **Azure App Service:** Hosts the Node.js backend API.
 - **Azure Static Web Apps:** Hosts the React frontend.
-- **Azure Cosmos DB:** Serves as the NoSQL database compatible with MongoDB queries.
+
 - **Azure Blob Storage:** Manages media uploads, including item photos, documents, and resources.
 - **Azure AD B2C:** Provides secure user authentication and management.
 - **Azure Functions:** Handles serverless tasks like notifications, automated emails, and other background jobs.
