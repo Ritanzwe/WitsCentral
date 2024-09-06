@@ -56,6 +56,21 @@ const StudentDashboard = () => {
     return ll;
   }
 
+  // Render star rating with random value
+  const renderStarRating = () => {
+    const rating = Math.floor(Math.random() * 5) + 1; // Random number between 1 and 5
+    const stars = Array(5).fill(false).map((_, index) => index < rating);
+    return (
+      <div style={{ fontSize: '1.5em', color: '#FFD700' }}>
+        {stars.map((filled, index) => (
+          <span key={index}>
+            {filled ? '★' : '☆'}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       <NavBar />
@@ -145,6 +160,8 @@ const StudentDashboard = () => {
                       <p className="card-text">
                         <strong>Availability:</strong> {tutor.isPaid ? 'Paid' : 'Free'}
                       </p>
+                      {/* Add randomized star rating */}
+                      {renderStarRating()}
                     </div>
                   </div>
                 </Link>
