@@ -21,19 +21,18 @@ const Forum = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the list of forum posts from the API
     fetch('/api/forum')
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setPosts(data);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setError(error);
         setLoading(false);
       });
@@ -46,14 +45,13 @@ const Forum = () => {
   const handlePostSubmit = (e) => {
     e.preventDefault();
 
-    // Post the new forum post to the server
     fetch('/api/forum', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: newPost }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.success) {
           setPosts([data.post, ...posts]);
           setNewPost('');
@@ -61,7 +59,7 @@ const Forum = () => {
           console.error('Error adding post:', data.error);
         }
       })
-      .catch(error => console.error('Error adding post:', error));
+      .catch((error) => console.error('Error adding post:', error));
   };
 
   if (loading) return <div className="container mt-3"><p>Loading...</p></div>;
@@ -69,38 +67,52 @@ const Forum = () => {
 
   return (
     <>
-        <NavBar/>
-        
-    <div className="container mt-3">
-      <h2 className="mb-4">Forum</h2>
+      <NavBar />
+      <div className="container mt-5">
+        <h2 className="text-center mb-4">Student Forum</h2>
 
-      <form onSubmit={handlePostSubmit} className="mb-4">
-        <div className="mb-3">
-          <textarea
-            className="form-control"
-            rows="3"
-            value={newPost}
-            onChange={handlePostChange}
-            placeholder="Write your post here..."
-            required
-          ></textarea>
-        </div>
-        <button type="submit" className="btn btn-primary">Post</button>
-      </form>
-
-      <div className="list-group">
-        {posts.map(post => (
-          <div key={post._id} className="list-group-item mb-2">
-            <p>{post.content}</p>
-            <small className="text-muted">
-              {formatDate(post.createdAt)}
-            </small>
+        {/* Form to create new posts */}
+        <div className="card shadow-sm mb-5">
+          <div className="card-body">
+            <h4 className="card-title mb-3">Create a New Post</h4>
+            <form onSubmit={handlePostSubmit}>
+              <div className="form-group mb-3">
+                <textarea
+                  className="form-control"
+                  rows="4"
+                  value={newPost}
+                  onChange={handlePostChange}
+                  placeholder="Write your post here..."
+                  required
+                ></textarea>
+              </div>
+              <div className="d-grid gap-2">
+                <button type="submit" className="btn btn-primary">
+                  Post
+                </button>
+              </div>
+            </form>
           </div>
-        ))}
-      </div>
-    </div>
-    </>
+        </div>
 
+        {/* Display posts */}
+        <div className="list-group">
+          {posts.map((post) => (
+            <div key={post._id} className="list-group-item mb-4 shadow-sm">
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h5 className="fw-bold">{post.user.fullname}</h5>
+                  <p className="mb-1">{post.content}</p>
+                </div>
+                <div className="text-muted text-end">
+                  <small>{formatDate(post.createdAt)}</small>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
