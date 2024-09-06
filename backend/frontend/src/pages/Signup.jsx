@@ -1,5 +1,5 @@
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import img from "../assets/onepiece.jpg";
+import img from "../assets/people.png";
 import { useState } from 'react';
 import { useSignup } from '../hooks/useSignUp';
 import { Link } from 'react-router-dom';
@@ -94,10 +94,10 @@ const SignUp = () => {
                     </p>
                 </Col>
 
-                <Col md={4} className="d-none d-md-block">
+                <Col md={6} className="d-none d-md-block d-flex justify-content-center align-items-center">
                     <img
-                        src={img}
-                        alt="Signup Visual"
+                        src={img} 
+                        alt="Login Visual"
                         className="img-fluid rounded"
                     />
                 </Col>

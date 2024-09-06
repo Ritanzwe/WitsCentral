@@ -2,7 +2,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
 import { useLogin } from '../hooks/useLogin'; 
 import { Link } from 'react-router-dom';
-import img from "../assets/onepiece.jpg";
+import img from "../assets/people.png";
 
 const Login = () => {
     const [formValues, setFormValues] = useState({
@@ -75,7 +75,7 @@ const Login = () => {
                     </p>
                 </Col>
 
-                <Col md={4} className="d-none d-md-block">
+                <Col md={6} className="d-none d-md-block d-flex justify-content-center align-items-center">
                     <img
                         src={img} 
                         alt="Login Visual"
