@@ -33,7 +33,8 @@ const AllTutors = () => {
   if (error) {
     return <p>Error loading tutors: {error.message}</p>;
   }
-  function cha(image){
+
+  function cha(image) {
     const ll = `${image}`.split("/")[2];
     return ll;
   }
@@ -49,21 +50,21 @@ const AllTutors = () => {
             className="col-md-6 col-lg-4 col-xl-3 mb-4"
             style={{ cursor: "pointer", textDecoration: "none" }}
           >
-            <div className="card shadow-sm">
+            <div className="card shadow-sm" style={styles.card}>
               <img
                 src={tutor.profileImage ? `http://localhost:5000/uploads/${cha(tutor.profileImage)}` : 'https://placehold.jp/150x150.png'}
                 className="card-img-top"
                 alt={tutor.userId.fullname}
-                style={{ height: '250px', objectFit: 'cover' }}
+                style={styles.image}
               />
-              <div className="card-body" style={{ backgroundColor: '#f8f9fa' }}>
-                <h5 className="card-title text-primary">
+              <div className="card-body" style={styles.cardBody}>
+                <h5 className="card-title text-primary" style={styles.title}>
                   {tutor.userId.fullname}
                 </h5>
-                <p className="card-text text-muted">
+                <p className="card-text text-muted" style={styles.subject}>
                   {tutor.subject}
                 </p>
-                <p className="card-text" style={{ maxHeight: '60px', overflow: 'hidden' }}>
+                <p className="card-text" style={styles.description}>
                   {tutor.description.length > 65
                     ? tutor.description.slice(0, 65) + '...'
                     : tutor.description}
@@ -78,6 +79,43 @@ const AllTutors = () => {
       </div>
     </div>
   );
+};
+
+// Styles object for the component
+const styles = {
+  card: {
+    height: '400px',  // Fixed height for all cards
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    borderRadius: '10px',
+  },
+  image: {
+    height: '200px',  // Fixed height for the image
+    objectFit: 'cover',
+    borderRadius: '10px 10px 0 0',
+  },
+  cardBody: {
+    backgroundColor: '#f8f9fa',
+    padding: '15px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: '1.2em',
+    fontWeight: 'bold',
+  },
+  subject: {
+    fontSize: '1em',
+    marginBottom: '10px',
+  },
+  description: {
+    fontSize: '0.9em',
+    maxHeight: '50px',  // To control text overflow
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 };
 
 export default AllTutors;
