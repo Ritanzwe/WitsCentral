@@ -39,7 +39,12 @@ const eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed, // Allows different types
     validate: {
       validator: function(value) {
-        return typeof value === 'number' || value === 'RSVP';
+        try {
+          const what = Number(value);
+          return true;
+        } catch (error) {
+          return value === 'RSVP';
+        }
       },
       message: 'Price must be a number or "RSVP".'
     },
