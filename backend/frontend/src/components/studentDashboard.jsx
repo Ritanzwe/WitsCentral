@@ -88,13 +88,13 @@ const StudentDashboard = () => {
         {searchTerm === '' && (
           <div className="my-5">
             <h2 className="text-center mb-4">Browse Modules</h2>
-            <div className="d-flex justify-content-center flex-wrap gap-4">
+            <div className="d-flex justify-content-center overflow-auto" style={{ gap: '20px', whiteSpace: 'nowrap' }}>
               {modules.map((module, index) => (
                 <div 
                   key={index} 
                   className="text-center"
                   onClick={() => handleModuleClick(module.title)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', display: 'inline-block' }}
                 >
                   <img
                     width="200"
@@ -102,6 +102,7 @@ const StudentDashboard = () => {
                     src={module.backgroundImage}
                     alt={module.title}
                     className="img-fluid rounded"
+                    style={{ objectFit: 'cover' }}
                   />
                   <p className="mt-2">{module.title}</p>
                 </div>
