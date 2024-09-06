@@ -39,7 +39,7 @@ WitsCentral is an online platform designed exclusively for Wits University stude
 ## Tech Stack
 - **Frontend:** React.js
 - **Backend:** Node.js with Express.js
-- **Database:** MongoDB (via Azure Cosmos DB)
+- **Database:** MongoDB
 - **Cloud Platform:** Azure (for hosting, storage, authentication, and other services)
 
 ## Architecture Overview
@@ -75,7 +75,7 @@ WitsCentral is an online platform designed exclusively for Wits University stude
 - **Azure Functions:** Handles serverless tasks like notifications, automated emails, and other background jobs.
 - **Azure Logic Apps:** Automates workflows (e.g., sending reminders for counseling appointments or event RSVPs).
 - **Azure Communication Services:** Enables real-time chat and notification features.
-- **Azure CDN:** Distributes static content to ensure fast delivery and reduced latency.
+
 
 ## Key Development Steps
 
