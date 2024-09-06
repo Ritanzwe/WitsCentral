@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from './NavBar';
-import Maths from "../assets/maths.png";
-import dsa from "../assets/dsa.png";
-import physics from "../assets/physics.png";
-import Econ from "../assets/Econ.png";
-import stats from "../assets/stats.png";
-import python from "../assets/python.png";
-import { useNavigate } from 'react-router-dom';
+import Maths from '../assets/maths.png';
+import dsa from '../assets/dsa.png';
+import physics from '../assets/physics.png';
+import Econ from '../assets/Econ.png';
+import stats from '../assets/stats.png';
+import python from '../assets/python.png';
+import { Link, useNavigate } from 'react-router-dom';
 
-const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
-  const [greeting, setGreeting] = useState('');
+const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [tutors, setTutors] = useState([]);
+
   const [modules] = useState([
     { title: 'Mathematics', backgroundImage: Maths },
     { title: 'Physics', backgroundImage: dsa },
@@ -20,21 +21,12 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
     { title: 'Computer Science', backgroundImage: stats },
     { title: 'Python', backgroundImage: python },
   ]);
-  const [tutors, setTutors] = useState([
-    { name: 'Tutor A', bio: 'Expert in Math and Physics.', image: '/path/to/tutorA.jpg' },
-    { name: 'Tutor B', bio: 'Specializes in Chemistry.', image: '/path/to/tutorB.jpg' },
-    { name: 'Tutor C', bio: 'Computer Science tutor.', image: '/path/to/tutorC.jpg' },
-  ]);
 
   useEffect(() => {
-    const currentHour = new Date().getHours();
-    if (currentHour < 12) {
-      setGreeting('Good Morning');
-    } else if (currentHour < 18) {
-      setGreeting('Good Afternoon');
-    } else {
-      setGreeting('Good Evening');
-    }
+    fetch('/api/tutors')
+      .then(response => response.json())
+      .then(data => setTutors(data))
+      .catch(error => console.error('Error fetching tutors:', error));
   }, []);
 
   const handleSearchChange = (e) => {
@@ -42,17 +34,34 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
   };
 
   // Filter tutors based on their description (bio) or name
-  const filteredTutors = tutors.filter(tutor =>
-    tutor.bio.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTutors = tutors.filter(tutor => 
+    tutor.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleBecomeTutor = () => {
-    navigate("/tutorprofile");
+    navigate('/tutorprofile');
   };
+
+  // Dummy data for demonstration
+  const greeting = 'Welcome'; // Replace with dynamic data
+  const studentName = 'Student'; // Replace with dynamic data
+
+  function cha(image){
+    const ll = `${image}`.split("/")[2];
+    return ll;
+  }
 
   return (
     <>
       <NavBar />
+
+      {/* Become a Tutor Section */}
+      <div style={styles.becomeTutorSection}>
+        <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
+        <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+          Become a Tutor
+        </button>
+      </div>
 
       <div style={styles.dashboard}>
         {/* Find a Perfect Tutor Box */}
@@ -72,9 +81,7 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
           <>
             {/* User Profile and Greeting */}
             <div style={styles.header}>
-              <div style={styles.greetingContainer}>
-                <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-              </div>
+              <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
             </div>
 
             {/* Browse Modules Section */}
@@ -82,23 +89,18 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
               <h2 style={styles.sectionTitle}>Browse Modules</h2>
               <div style={styles.modulesContainer}>
                 {modules.map((module, index) => (
-                  <img
-                    width={"200"}
-                    height={"250"}
-                    key={index}
-                    src={module.backgroundImage}
-                    alt={module.title}
-                  />
+                  <div key={index} style={styles.module}>
+                    <img
+                      width="200"
+                      height="250"
+                      src={module.backgroundImage}
+                      alt={module.title}
+                      style={styles.moduleImage}
+                    />
+                    <p style={styles.moduleTitle}>{module.title}</p>
+                  </div>
                 ))}
               </div>
-            </div>
-
-            {/* Become a Tutor Section */}
-            <div style={styles.becomeTutorSection}>
-              <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
-              <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
-                Become a Tutor
-              </button>
             </div>
           </>
         )}
@@ -106,17 +108,43 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
         {/* All Tutors Section */}
         <div style={styles.tutorsSection}>
           <h2 style={styles.sectionTitle}>All Tutors</h2>
-          <div style={styles.tutorContainer}>
+          <div className="row">
             {filteredTutors.length > 0 ? (
-              filteredTutors.map((tutor, index) => (
-                <div key={index} style={styles.tutorCard}>
-                  <img src={tutor.image} alt={tutor.name} style={styles.tutorImage} />
-                  <h3 style={styles.tutorName}>{tutor.name}</h3>
-                  <p style={styles.tutorBio}>{tutor.bio}</p>
-                </div>
+              filteredTutors.map(tutor => (
+                <Link
+                  to={`/tutor/${tutor._id}`}
+                  key={tutor._id}
+                  className="col-md-6 col-lg-4 col-xl-3 mb-4"
+                  style={{ cursor: "pointer", textDecoration: "none" }}
+                >
+                  <div className="card shadow-sm">
+                    <img
+                      src={tutor.profileImage ? `http://localhost:5000/uploads/${cha(tutor.profileImage)}` : 'https://placehold.jp/150x150.png'}
+                      className="card-img-top"
+                      alt={tutor.userId.fullname}
+                      style={{ height: '200px', objectFit: 'cover' }}
+                    />
+                    <div className="card-body" style={{ backgroundColor: '#f8f9fa' }}>
+                      <h5 className="card-title text-primary">
+                        {tutor.userId.fullname}
+                      </h5>
+                      <p className="card-text text-muted">
+                        {tutor.subject}
+                      </p>
+                      <p className="card-text" style={{ maxHeight: '60px', overflow: 'hidden' }}>
+                        {tutor.description.length > 40
+                          ? tutor.description.slice(0, 40) + '...'
+                          : tutor.description}
+                      </p>
+                      <p className="card-text">
+                        <strong>Availability:</strong> {tutor.isPaid ? 'Paid' : 'Free'}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               ))
             ) : (
-              <p style={styles.noTutorsMessage}>No tutors found for "{searchTerm}".</p>
+              <p style={styles.noTutorsMessage}>No tutors found for {`${searchTerm}`}.</p>
             )}
           </div>
         </div>
@@ -159,16 +187,6 @@ const styles = {
     justifyContent: 'center',
     marginBottom: '30px',
   },
-  largeProfileImage: {
-    width: '150px',
-    height: '150px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-    marginRight: '20px',
-  },
-  greetingContainer: {
-    textAlign: 'center',
-  },
   greeting: {
     fontSize: '2.8em',
     color: '#333',
@@ -185,36 +203,21 @@ const styles = {
     overflowX: 'scroll',
     gap: '20px',
   },
-  tutorsSection: {
-    marginTop: '40px',
-  },
-  tutorContainer: {
+  module: {
     display: 'flex',
-    flexWrap: 'wrap',
-    gap: '20px',
-  },
-  tutorCard: {
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '10px',
-    width: '30%',
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+    flexDirection: 'column',
+    alignItems: 'center',
     textAlign: 'center',
   },
-  tutorImage: {
-    width: '100%',
-    height: 'auto',
+  moduleImage: {
     borderRadius: '10px',
-    objectFit: 'cover',
   },
-  tutorName: {
-    fontSize: '1.5em',
-    marginTop: '15px',
-  },
-  tutorBio: {
+  moduleTitle: {
     fontSize: '1.2em',
     marginTop: '10px',
-    color: '#555',
+  },
+  tutorsSection: {
+    marginTop: '40px',
   },
   noTutorsMessage: {
     fontSize: '1.4em',
@@ -232,7 +235,7 @@ const styles = {
     color: '#fff',
     backgroundColor: '#007bff',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '10px',
     cursor: 'pointer',
   },
 };
