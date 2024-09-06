@@ -7,7 +7,6 @@ const { authenticate } = require('../middlewares/authprotect');
 router.get('/', async (req, res) => {
   try {
     const posts = await Post.find({}).populate("user");
-    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
