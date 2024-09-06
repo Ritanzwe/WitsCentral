@@ -42,9 +42,13 @@ const StudentDashboard = () => {
     navigate('/tutorprofile');
   };
 
-  // Dummy data for demonstration
-  const greeting = 'Welcome'; // Replace with dynamic data
-  const studentName = 'Student'; // Replace with dynamic data
+  // Handle module click to set the search term to the module title
+  const handleModuleClick = (moduleTitle) => {
+    setSearchTerm(moduleTitle);
+  };
+
+  // const greeting = 'Welcome'; // Replace with dynamic data
+  // const studentName = 'Student'; // Replace with dynamic data
 
   function cha(image){
     const ll = `${image}`.split("/")[2];
@@ -76,20 +80,23 @@ const StudentDashboard = () => {
           />
         </div>
 
-        {/* Only show the rest of the content if there's no search term */}
         {searchTerm === '' && (
           <>
             {/* User Profile and Greeting */}
-            <div style={styles.header}>
+            {/* <div style={styles.header}>
               <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-            </div>
+            </div> */}
 
             {/* Browse Modules Section */}
             <div style={styles.modulesSection}>
               <h2 style={styles.sectionTitle}>Browse Modules</h2>
               <div style={styles.modulesContainer}>
                 {modules.map((module, index) => (
-                  <div key={index} style={styles.module}>
+                  <div 
+                    key={index} 
+                    style={styles.module} 
+                    onClick={() => handleModuleClick(module.title)} // Click handler
+                  >
                     <img
                       width="200"
                       height="250"
@@ -202,6 +209,7 @@ const styles = {
     display: 'flex',
     overflowX: 'scroll',
     gap: '20px',
+    cursor: 'pointer', // Make it clear the modules are clickable
   },
   module: {
     display: 'flex',
@@ -226,7 +234,8 @@ const styles = {
     marginTop: '20px',
   },
   becomeTutorSection: {
-    marginTop: '40px',
+    marginBottom: '25px',
+    marginTop: '25px',
     textAlign: 'center',
   },
   becomeTutorButton: {
