@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
 });
 
 // Update tutor profile
-router.put('/:id', authenticate, upload.single('profileImage'), async (req, res) => {
+router.put('/:id', authenticate, upload.single('image'), async (req, res) => {
     try {
       const { subject, description, isPaid } = req.body;
       const profileImage = req.file ? req.file.path : undefined;
