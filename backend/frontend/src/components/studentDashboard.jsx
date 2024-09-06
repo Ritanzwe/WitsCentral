@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
-import Maths from "../assets/maths.png"
-import dsa from "../assets/dsa.png"
-import physics from "../assets/physics.png"
-import  Econ from "../assets/Econ.png"
-import stats from "../assets/stats.png"
-import python from "../assets/python.png"
+import Maths from "../assets/maths.png";
+import dsa from "../assets/dsa.png";
+import physics from "../assets/physics.png";
+import Econ from "../assets/Econ.png";
+import stats from "../assets/stats.png";
+import python from "../assets/python.png";
+import { useNavigate } from 'react-router-dom';
 
 const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
   const [greeting, setGreeting] = useState('');
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [modules,setModlues] = useState([
+  const [modules, setModules] = useState([
     { title: 'Mathematics', backgroundImage: Maths },
     { title: 'Physics', backgroundImage: dsa },
     { title: 'Chemistry', backgroundImage: physics },
     { title: 'Biology', backgroundImage: Econ },
     { title: 'Computer Science', backgroundImage: stats },
-    { title: 'python', backgroundImage: python },
+    { title: 'Python', backgroundImage: python },
   ]);
   const [tutors] = useState([
     { name: 'Tutor A', bio: 'Expert in Math and Physics.', image: '/path/to/tutorA.jpg' },
@@ -39,60 +41,75 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
     setSearchTerm(e.target.value);
   };
 
+  const handleBecomeTutor = () => {
+    // Logic for becoming a tutor (e.g., redirect to a tutor application form)
+    // alert('Redirecting to the Tutor Application Form...');
+    navigate("/tutorprofile");
+
+  };
+
   return (
     <>
-    <NavBar/>
-    
-    <div style={styles.dashboard}>
+      <NavBar />
+
+      <div style={styles.dashboard}>
         {/* Find a Perfect Tutor Box */}
         <div style={styles.tutorBox}>
-            <h2 style={styles.tutorText}>Find a perfect tutor online</h2>
-            <input
+          <h2 style={styles.tutorText}>Find a perfect tutor online</h2>
+          <input
             type="text"
             placeholder="Search for tutors..."
             value={searchTerm}
             onChange={handleSearchChange}
             style={styles.searchInput}
-            />
+          />
         </div>
 
         {/* User Profile and Greeting */}
         <div style={styles.header}>
-            <div style={styles.greetingContainer}>
+          <div style={styles.greetingContainer}>
             <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-            </div>
+          </div>
         </div>
 
         {/* Browse Modules Section */}
         <div style={styles.modulesSection}>
-            <h2 style={styles.sectionTitle}>Browse Modules</h2>
-            <div style={styles.modulesContainer}>
+          <h2 style={styles.sectionTitle}>Browse Modules</h2>
+          <div style={styles.modulesContainer}>
             {modules.map((module, index) => (
-                <img
+              <img
                 width={"200"}
                 height={"250"}
                 key={index}
                 src={module.backgroundImage}
-                />
+                alt={module.title}
+              />
             ))}
-            </div>
+          </div>
         </div>
 
         {/* All Tutors Section */}
         <div style={styles.tutorsSection}>
-            <h2 style={styles.sectionTitle}>All Tutors</h2>
-            <div style={styles.tutorContainer}>
+          <h2 style={styles.sectionTitle}>All Tutors</h2>
+          <div style={styles.tutorContainer}>
             {tutors.map((tutor, index) => (
-                <div key={index} style={styles.tutorCard}>
+              <div key={index} style={styles.tutorCard}>
                 <img src={tutor.image} alt={tutor.name} style={styles.tutorImage} />
                 <h3 style={styles.tutorName}>{tutor.name}</h3>
                 <p style={styles.tutorBio}>{tutor.bio}</p>
-                </div>
+              </div>
             ))}
-            </div>
+          </div>
         </div>
-    </div>
 
+        {/* Become a Tutor Section */}
+        <div style={styles.becomeTutorSection}>
+          <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
+          <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+            Become a Tutor
+          </button>
+        </div>
+      </div>
     </>
   );
 };
@@ -157,17 +174,6 @@ const styles = {
     overflowX: 'scroll',
     gap: '20px',
   },
-  moduleCard: {
-    minWidth: '250px',
-    padding: '30px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    borderRadius: '10px',
-    textAlign: 'center',
-    fontSize: '1.5em',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
   tutorsSection: {
     marginTop: '40px',
   },
@@ -198,6 +204,19 @@ const styles = {
     fontSize: '1.2em',
     marginTop: '10px',
     color: '#555',
+  },
+  becomeTutorSection: {
+    marginTop: '40px',
+    textAlign: 'center',
+  },
+  becomeTutorButton: {
+    padding: '15px 30px',
+    fontSize: '1.2em',
+    color: '#fff',
+    backgroundColor: '#007bff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
   },
 };
 

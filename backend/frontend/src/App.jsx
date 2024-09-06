@@ -37,7 +37,7 @@ function App() {
         
 
         {/* ================================================================================== */}
-        <Route path = "/service/tutoring" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
+        <Route path = "/service/tutoring" element = {authUser? <StudentDashboard/> : <Navigate to= '/'/> }/>
         <Route path = "/service/student-market" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
         <Route path = "/service/books" element = {authUser? <Books/> : <Navigate to= '/'/> }/>
         <Route path = "/service/elctronics" element = {authUser? <AdminEventPage/> : <Navigate to= '/'/> }/>
