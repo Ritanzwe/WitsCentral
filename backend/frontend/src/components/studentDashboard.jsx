@@ -1,4 +1,7 @@
+
 import { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSpring, useTrail, animated } from '@react-spring/web';
 import NavBar from './NavBar';
 import Maths from "../assets/maths.png";
 import dsa from "../assets/dsa.png";
@@ -12,7 +15,7 @@ import AllTutors from './AllTutors';
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [modules, setModules] = useState([
+  const [modules] = useState([
     { title: 'Mathematics', backgroundImage: Maths },
     { title: 'Physics', backgroundImage: dsa },
     { title: 'Chemistry', backgroundImage: physics },
@@ -26,9 +29,13 @@ const StudentDashboard = () => {
     setSearchTerm(e.target.value);
   };
 
+  // Filter tutors based on their description (bio) or name
+  const filteredTutors = tutors.filter(tutor =>
+    tutor.bio.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const handleBecomeTutor = () => {
     navigate("/tutorprofile");
-
   };
 
   return (
@@ -56,24 +63,60 @@ const StudentDashboard = () => {
           />
         </div>
 
-        {/* Browse Modules Section */}
-        <div style={styles.modulesSection}>
-          <h2 style={styles.sectionTitle}>Browse Modules</h2>
-          <div style={styles.modulesContainer}>
-            {modules.map((module, index) => (
-              <img
-                width={"200"}
-                height={"250"}
-                key={index}
-                src={module.backgroundImage}
-                alt={module.title}
-              />
-            ))}
+        {/* Only show the rest of the content if there's no search term */}
+        {searchTerm === '' && (
+          <>
+            {/* User Profile and Greeting */}
+            <div style={styles.header}>
+              <animated.div style={{ ...styles.greetingContainer, ...greetingAnimation }}>
+                <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
+              </animated.div>
+            </div>
+
+            {/* Browse Modules Section */}
+            <div style={styles.modulesSection}>
+              <h2 style={styles.sectionTitle}>Browse Modules</h2>
+              <div style={styles.modulesContainer}>
+                {modulesTrail.map((props, index) => (
+                  <animated.img
+                    style={props}
+                    width={"200"}
+                    height={"250"}
+                    key={index}
+                    src={modules[index].backgroundImage}
+                    alt={modules[index].title}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Become a Tutor Section */}
+            <div style={styles.becomeTutorSection}>
+              <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
+              <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+                Become a Tutor
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* All Tutors Section */}
+        <div style={styles.tutorsSection}>
+          <h2 style={styles.sectionTitle}>All Tutors</h2>
+          <div style={styles.tutorContainer}>
+            {filteredTutors.length > 0 ? (
+              tutorsTrail.map((props, index) => (
+                <animated.div key={index} style={{ ...styles.tutorCard, ...props }}>
+                  <img src={filteredTutors[index].image} alt={filteredTutors[index].name} style={styles.tutorImage} />
+                  <h3 style={styles.tutorName}>{filteredTutors[index].name}</h3>
+                  <p style={styles.tutorBio}>{filteredTutors[index].bio}</p>
+                </animated.div>
+              ))
+            ) : (
+              <p style={styles.noTutorsMessage}>No tutors found for "{searchTerm}".</p>
+            )}
           </div>
         </div>
-
-        <AllTutors/>
-
       </div>
     </>
   );
@@ -170,6 +213,12 @@ const styles = {
     marginTop: '10px',
     color: '#555',
   },
+  noTutorsMessage: {
+    fontSize: '1.4em',
+    color: '#999',
+    textAlign: 'center',
+    marginTop: '20px',
+  },
   becomeTutorSection: {
     marginTop: '40px',
     textAlign: 'center',
@@ -180,7 +229,7 @@ const styles = {
     color: '#fff',
     backgroundColor: '#007bff',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '10px',
     cursor: 'pointer',
   },
 };
