@@ -51,7 +51,7 @@ const AllTutors = () => {
           >
             <div className="card shadow-sm">
               <img
-                src={tutor.image ? `http://localhost:5000/uploads/${cha(tutor.image)}` : 'https://placehold.jp/150x150.png'}
+                src={tutor.profileImage ? `http://localhost:5000/uploads/${cha(tutor.profileImage)}` : 'https://placehold.jp/150x150.png'}
                 className="card-img-top"
                 alt={tutor.userId.fullname}
                 style={{ height: '250px', objectFit: 'cover' }}

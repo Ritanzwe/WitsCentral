@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import NavBar from './NavBar';
 import Maths from "../assets/maths.png";
 import dsa from "../assets/dsa.png";
@@ -7,9 +7,9 @@ import Econ from "../assets/Econ.png";
 import stats from "../assets/stats.png";
 import python from "../assets/python.png";
 import { useNavigate } from 'react-router-dom';
+import AllTutors from './AllTutors';
 
-const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
-  const [greeting, setGreeting] = useState('');
+const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [modules, setModules] = useState([
@@ -20,30 +20,13 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
     { title: 'Computer Science', backgroundImage: stats },
     { title: 'Python', backgroundImage: python },
   ]);
-  const [tutors] = useState([
-    { name: 'Tutor A', bio: 'Expert in Math and Physics.', image: '/path/to/tutorA.jpg' },
-    { name: 'Tutor B', bio: 'Specializes in Chemistry.', image: '/path/to/tutorB.jpg' },
-    { name: 'Tutor C', bio: 'Computer Science tutor.', image: '/path/to/tutorC.jpg' },
-  ]);
-
-  useEffect(() => {
-    const currentHour = new Date().getHours();
-    if (currentHour < 12) {
-      setGreeting('Good Morning');
-    } else if (currentHour < 18) {
-      setGreeting('Good Afternoon');
-    } else {
-      setGreeting('Good Evening');
-    }
-  }, []);
+  
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleBecomeTutor = () => {
-    // Logic for becoming a tutor (e.g., redirect to a tutor application form)
-    // alert('Redirecting to the Tutor Application Form...');
     navigate("/tutorprofile");
 
   };
@@ -51,6 +34,14 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
   return (
     <>
       <NavBar />
+
+      {/* Become a Tutor Section */}
+      <div className='mb-2' style={styles.becomeTutorSection}>
+        <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
+        <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
+          Become a Tutor
+        </button>
+      </div>
 
       <div style={styles.dashboard}>
         {/* Find a Perfect Tutor Box */}
@@ -63,13 +54,6 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
             onChange={handleSearchChange}
             style={styles.searchInput}
           />
-        </div>
-
-        {/* User Profile and Greeting */}
-        <div style={styles.header}>
-          <div style={styles.greetingContainer}>
-            <h1 style={styles.greeting}>{greeting}, {studentName}!</h1>
-          </div>
         </div>
 
         {/* Browse Modules Section */}
@@ -88,27 +72,8 @@ const StudentDashboard = ({ studentName, studentImage, enrolledCourses }) => {
           </div>
         </div>
 
-        {/* All Tutors Section */}
-        <div style={styles.tutorsSection}>
-          <h2 style={styles.sectionTitle}>All Tutors</h2>
-          <div style={styles.tutorContainer}>
-            {tutors.map((tutor, index) => (
-              <div key={index} style={styles.tutorCard}>
-                <img src={tutor.image} alt={tutor.name} style={styles.tutorImage} />
-                <h3 style={styles.tutorName}>{tutor.name}</h3>
-                <p style={styles.tutorBio}>{tutor.bio}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <AllTutors/>
 
-        {/* Become a Tutor Section */}
-        <div style={styles.becomeTutorSection}>
-          <h2 style={styles.sectionTitle}>Interested in Becoming a Tutor?</h2>
-          <button onClick={handleBecomeTutor} style={styles.becomeTutorButton}>
-            Become a Tutor
-          </button>
-        </div>
       </div>
     </>
   );
