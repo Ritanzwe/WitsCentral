@@ -47,8 +47,8 @@ const StudentDashboard = () => {
     setSearchTerm(moduleTitle);
   };
 
-  const greeting = 'Welcome'; // Replace with dynamic data
-  const studentName = 'Student'; // Replace with dynamic data
+  // const greeting = 'Welcome'; // Replace with dynamic data
+  // const studentName = 'Student'; // Replace with dynamic data
 
   function cha(image){
     const ll = `${image}`.split("/")[2];
