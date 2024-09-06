@@ -1,159 +1,148 @@
 import { useState, useEffect } from 'react';
-import { Navbar, Nav, Dropdown, Image, Container, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { useLogout } from '../hooks/useLogout';
-import profileImage from '/dummy.jpg';
-import logo from '../assets/onepiece.jpg';
+import NavBar from '../components/NavBar';
+import { useParams } from 'react-router-dom';
 
-function NavBar() {
-  const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState('');
-  const [userName, setUserName] = useState(''); // State for the user's name
-  const { logout } = useLogout();
+const TutorProfile = () => {
+  const { id } = useParams();
+  const [tutorData, setTutorData] = useState({
+    profileImage: '/default-profile.png',
+    subject: '',
+    description: '',
+    contactInfo: '',
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const all = JSON.parse(localStorage.getItem('wits'));
-    if (all) {
-      setProfilePic(profileImage);
-      setUserName(all.userId?.fullname || 'User'); // Set the user's name from the stored data
-    }
-  }, [profilePic]);
-
-  // Handle logout logic
-  const handleLogout = async () => {
-    localStorage.clear(); // Clear all user-related data from localStorage
-    await logout();
-    navigate('/login'); // Redirect to login page
-  };
-
-  // Handle edit profile logic
-  const handleEditProfile = () => {
-    navigate('/edit-profile'); // Redirect to edit profile page
-  };
-
-  // Handle file upload to Azure Blob Storage
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0]; // Get the file from input
-    if (!file) return;
-
-    try {
-      // Fetch the SAS token from your backend
-      const response = await fetch('/api/get-sas-token'); // Replace with your endpoint to get the SAS token
-      const { sasToken } = await response.json();
-      
-      // Construct the Azure Blob Storage URL
-      const azureBlobStorageUrl = `https://<your-storage-account>.blob.core.windows.net/<your-container-name>/${file.name}?${sasToken}`; // Replace with your Azure Blob Storage URL
-
-      // Upload the file to Azure Blob Storage using fetch
-      const uploadResponse = await fetch(azureBlobStorageUrl, {
-        method: 'PUT',
-        headers: {
-          'x-ms-blob-type': 'BlockBlob',
-          'Content-Type': file.type,
-        },
-        body: file,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload file');
+    const fetchTutorData = async () => {
+      try {
+        const response = await fetch(`/api/tutors/${id}`);
+        const data = await response.json();
+        console.log(data);
+        setTutorData(data);
+      } catch (error) {
+        setError('Error fetching tutor data');
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setProfilePic(URL.createObjectURL(file)); // Update the profile picture with the new image
-      alert('Profile picture updated successfully!');
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Failed to upload profile picture. Please try again.');
-    }
-  };
+    fetchTutorData();
+  }, [id]);
+
+  if (loading) return <p style={styles.loading}>Loading...</p>;
+  if (error) return <p style={styles.error}>{error}</p>;
+
+  function extractImageName(image) {
+    return `${image}`.split("/")[2];
+  }
 
   return (
-    <Navbar expand="lg" style={styles.navbar}>
-      <Container>
-        <Navbar.Brand href="/" className="d-flex align-items-center">
+    <div>
+      <NavBar />
+      <div style={styles.container}>
+        <h2 style={styles.title}>Tutor Profile</h2>
+        <div style={styles.profile}>
           <img
-            src={logo}
-            alt="Logo"
-            style={styles.logo}
+            src={tutorData.profileImage ? `http://localhost:5000/uploads/${extractImageName(tutorData.profileImage)}` : ''}
+            alt="Profile"
+            style={styles.profileImage}
           />
-          <span style={styles.brandText}>WITS CENTRAL</span>
-        </Navbar.Brand>
-        <Nav className="ms-auto d-flex align-items-center">
-          <Dropdown align="end">
-            <Dropdown.Toggle
-              variant="link"
-              id="dropdown-basic"
-              className="d-flex align-items-center"
-              style={styles.dropdownToggle}
-            >
-              {profilePic ? (
-                <Image
-                  src={profilePic}
-                  roundedCircle
-                  style={styles.profileImage}
-                />
-              ) : (
-                <i className="bi bi-person-circle" style={styles.icon}></i>
-              )}
-              {/* Display the user's name */}
-              <h3 style={styles.userName}>{userName}</h3>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={handleEditProfile}>Edit Profile</Dropdown.Item>
-              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-              <Form.Group controlId="formFile" className="mb-3">
-                <Form.Control type="file" onChange={handleFileUpload} />
-              </Form.Group>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Nav>
-      </Container>
-    </Navbar>
+          <h3 style={styles.subject}>{tutorData.userId.fullname}</h3>
+          <h4><span className='text-primary'>can tutor:</span> {tutorData.subject}</h4>
+          <p style={styles.description}>{tutorData.description}</p>
+          
+          <div style={styles.contactContainer}>
+            <h4 style={styles.contactTitle}>Contact Us</h4>
+            <pre style={styles.contactInfo}>{tutorData.contactInfo}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
-// Enhanced Styles
+// Enhanced Styles for Tutor Profile Page
 const styles = {
-  navbar: {
-    backgroundColor: '#0d6efd',
-    padding: '10px 20px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-  },
-  logo: {
-    height: '40px',
-    width: '40px',
-    borderRadius: '50%',
-    marginRight: '10px',
+  container: {
+    padding: '40px',
+    maxWidth: '800px',
+    margin: '30px auto',
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease',
-    objectFit: 'cover',
   },
-  brandText: {
-    color: '#ffffff',
-    fontSize: '1.4em',
-    fontWeight: 'bold',
+  title: {
+    textAlign: 'center',
+    fontSize: '2.5em',
+    marginBottom: '20px',
+    color: '#3b3b3b',
+    fontWeight: '700',
+    borderBottom: '3px solid #0d6efd',
+    paddingBottom: '10px',
   },
-  dropdownToggle: {
-    color: '#ffffff',
+  profile: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    textDecoration: 'none',
+    textAlign: 'center',
   },
   profileImage: {
-    width: '35px',
-    height: '35px',
+    width: '180px',
+    height: '180px',
+    borderRadius: '50%',
     objectFit: 'cover',
-    marginLeft: '10px',
+    marginBottom: '20px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease',
   },
-  icon: {
-    fontSize: '30px',
-    color: '#ffffff',
+  subject: {
+    fontSize: '1.8em',
+    margin: '10px 0',
+    color: '#0d6efd',
+    fontWeight: '600',
   },
-  userName: {
-    color: '#ffffff',
-    marginLeft: '10px',
+  description: {
+    fontSize: '1.1em',
+    margin: '20px 0',
+    color: '#555',
+    lineHeight: '1.6',
+  },
+  contactContainer: {
+    marginTop: '20px',
+    padding: '25px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    backgroundColor: '#f1f7ff',
+    width: '100%',
+    maxWidth: '400px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+  },
+  contactTitle: {
+    fontSize: '1.4em',
+    marginBottom: '10px',
+    color: '#333',
+    fontWeight: '600',
+  },
+  contactInfo: {
     fontSize: '1em',
+    color: '#444',
+    whiteSpace: 'pre-wrap',
+  },
+  loading: {
+    fontSize: '1.2em',
+    textAlign: 'center',
+    marginTop: '50px',
+    color: '#0d6efd',
+  },
+  error: {
+    fontSize: '1.2em',
+    textAlign: 'center',
+    marginTop: '50px',
+    color: '#e63946',
   },
 };
 
-export default NavBar;
+export default TutorProfile;
