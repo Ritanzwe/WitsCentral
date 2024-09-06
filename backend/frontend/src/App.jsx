@@ -17,6 +17,7 @@ import ShopDashboard from './pages/ShopDashboard.jsx';
 import CreateShop from './components/CreateShop.jsx';
 import ShopDetails from './components/ShopDetails.jsx';
 import CreateProduct from './components/CreateProduct.jsx';
+import TutorProfile from './components/TutorProfile.jsx'
 import Forum from './pages/Forum.jsx';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route path="/event-create" element={authUser ? <Events /> : <Navigate to="/" />} />
         <Route path="/student" element={authUser ? <StudentDashboard /> : <Navigate to="/" />} />
         <Route path="/tutorprofile" element={authUser ? <CreateTutorProfile /> : <Navigate to="/" />} />
+        <Route path = "/tutor/:id" element = {authUser? <TutorProfile/> : <Navigate to= '/'/> }/>
         <Route path="/shopownerprofile" element={authUser ? <CreateShop /> : <Navigate to="/" />} />
         <Route path="/shop/:id" element={authUser ? <ShopDetails /> : <Navigate to="/" />} />
         <Route path="/shop/:id/product/new" element={authUser ? <CreateProduct /> : <Navigate to="/" />} />

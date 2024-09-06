@@ -41,15 +41,38 @@ const register =  async (req, res) => {
 }
 
 const getTutors =  async (req, res) => {
-    try {
-      const tutors = await Tutor.find().populate('userId', 'fullname email profilePicture contactInfo');
-      
-      res.status(200).json(tutors);
-    } catch (error) {
-      console.error("Error fetching tutors:", error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+  try {
+    const tutors = await Tutor.find().populate('userId', 'fullname email profilePicture contactInfo');
+    
+    res.status(200).json(tutors);
+  } catch (error) {
+    console.error("Error fetching tutors:", error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
+const getTutorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Ensure ID is valid
+    if (!id) {
+      return res.status(400).json({ error: 'ID parameter is required' });
+    }
+
+    // Find the tutor by ID and populate user details
+    const tutor = await Tutor.findById(id).populate('userId', 'fullname email profilePicture contactInfo');
+
+    if (!tutor) {
+      return res.status(404).json({ error: 'Tutor not found' });
+    }
+
+    res.status(200).json(tutor);
+  } catch (error) {
+    console.error("Error fetching tutor:", error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 const updateTutor =  async (req, res) => {
     try {
@@ -96,6 +119,7 @@ module.exports = {
     register,
     getTutors,
     updateTutor,
-    deleteTutor
+    deleteTutor,
+    getTutorId
 
 }

@@ -22,6 +22,9 @@ const tutorSchema = new mongoose.Schema({
     type: String,
     default: "public/images/dummy.jpg",
   },
+  contactInfo:{
+    type:String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

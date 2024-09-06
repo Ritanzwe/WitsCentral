@@ -8,6 +8,7 @@ const CreateTutorProfile = () => {
     description: '',
     isPaid: false,
     profileImage: null,
+    contact: '', // New state for contact information
   });
 
   const handleChange = (e) => {
@@ -23,12 +24,12 @@ const CreateTutorProfile = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    Object.keys(profileData).forEach(key => {
+    Object.keys(profileData).forEach((key) => {
       formData.append(key, profileData[key]);
     });
 
     if (!profileData.profileImage) {
-      toast.error("Image is required");
+      toast.error('Image is required');
       return;
     }
 
@@ -52,6 +53,7 @@ const CreateTutorProfile = () => {
         description: '',
         isPaid: false,
         profileImage: null,
+        contact: '', // Clear contact field
       });
     } catch (error) {
       console.error('Error during form submission:', error);
@@ -79,6 +81,16 @@ const CreateTutorProfile = () => {
             value={profileData.description}
             onChange={handleChange}
             style={styles.textarea}
+          />
+
+          {/* New contact field */}
+          <input
+            type="text"
+            name="contact"
+            placeholder="Contact Information (e.g., email or phone number)"
+            value={profileData.contact}
+            onChange={handleChange}
+            style={styles.input}
           />
 
           <div style={styles.radioGroup}>
