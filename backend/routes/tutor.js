@@ -5,7 +5,7 @@ const Tutor = require('../models/tutor.model');
 const upload = require('../middlewares/upload');
 const { authenticate } = require('../middlewares/authprotect'); 
 
-router.post('/', authenticate, upload.single('profileImage'), async (req, res) => {
+router.post('/', authenticate, upload.single('image'), async (req, res) => {
   try {
     const { subject, description, isPaid } = req.body;
     const profileImage = req.file ? req.file.path : '/uploads/dummy.jpg'; // handle file upload

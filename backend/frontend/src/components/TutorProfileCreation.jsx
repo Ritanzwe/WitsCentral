@@ -19,7 +19,7 @@ const CreateTutorProfile = () => {
         toast.error("Image is required");
         return;
     }
-    formData.append('profileImage', profileImage); // Ensure this is handled correctly for file uploads
+    formData.append('image', profileImage); // Ensure this is handled correctly for file uploads
 
     try {
       const response = await fetch('/api/tutors', {
