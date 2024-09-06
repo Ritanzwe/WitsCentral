@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/post.model');
+const { authenticate } = require('../middlewares/authprotect');
 
 // Get all forum posts
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).populate("user");
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -14,11 +16,12 @@ router.get('/', async (req, res) => {
 });
 
 // Create a new forum post
-router.post('/', async (req, res) => {
+router.post('/',authenticate, async (req, res) => {
   try {
     const { content } = req.body;
-
+    
     const post = new Post({
+      user:req.user._id,
       content,
     });
 
