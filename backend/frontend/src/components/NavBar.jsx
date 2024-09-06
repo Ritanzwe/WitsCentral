@@ -3,7 +3,7 @@ import { Navbar, Nav, Dropdown, Image, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import profileImage from '/dummy.jpg';
-import logo from '../assets/onepiece.jpg';
+import logo from '../assets/LOGO.png';
 
 function NavBar() {
   const navigate = useNavigate();
